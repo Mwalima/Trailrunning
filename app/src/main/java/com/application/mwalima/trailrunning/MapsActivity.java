@@ -82,19 +82,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     R.array.distance_array, android.R.layout.simple_spinner_item);
         distance_adapter.setDropDownViewResource (android.R.layout.simple_spinner_dropdown_item);
             distance.setAdapter (distance_adapter);
+
         // Set up the spinner/terrain list
         Spinner terrain = findViewById (R.id.spinner2);
         ArrayAdapter<CharSequence> terrain_adapter = ArrayAdapter.createFromResource (this,
                 R.array.terrain_array, android.R.layout.simple_spinner_item);
         terrain_adapter.setDropDownViewResource (android.R.layout.simple_spinner_dropdown_item);
         terrain.setAdapter (terrain_adapter);
+
         // Set up the spinner/proximity list
         Spinner proximity = findViewById (R.id.spinner3);
         ArrayAdapter<CharSequence> proximity_adapter = ArrayAdapter.createFromResource (this,
                 R.array.proximity_array, android.R.layout.simple_spinner_item);
         proximity_adapter.setDropDownViewResource (android.R.layout.simple_spinner_dropdown_item);
         proximity.setAdapter (proximity_adapter);
-        // Set up the spinner/Country list
+
 
     }
 

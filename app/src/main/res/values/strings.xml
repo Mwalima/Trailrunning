@@ -33,6 +33,8 @@
 
 
     <string name="country_array">country</string>
+    <string name="search">search</string>
+    <string name="type_the_name_of_the_location">Name of the location</string>
     <string-array name="country_array">
         <item>Country</item>
         <item>Belgium</item>

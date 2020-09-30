@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
+class GetNearbyPlacesData extends AsyncTask<Object, String, String>{
 
     private String googlePlacesData;
     private GoogleMap mMap;
@@ -35,7 +35,6 @@ class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return googlePlacesData;
     }
 

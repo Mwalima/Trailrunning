@@ -301,7 +301,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                             .strokeColor (Color.RED)
                                             .fillColor (Color.argb (70, 150, 50, 50))
                             );
-                            String all = "cafe&restaurant&mcdonalds&supermarket&public+toilet";
+                            String all = "cafe";
                             String url = getUrl (lat, lng, all);
                             dataTransfer[0] = mMap;
                             dataTransfer[1] = url;

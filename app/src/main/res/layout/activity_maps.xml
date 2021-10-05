@@ -11,32 +11,35 @@
         android:orientation="horizontal">
 
         <Spinner
-            android:id="@+id/spinner1"
+            android:id="@+id/afstand"
             android:layout_width="138dp"
             android:layout_height="match_parent"
             android:background="@android:drawable/btn_dropdown"
             android:clickable="true"
             android:focusable="true"
             android:spinnerMode="dropdown"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:textSize="8sp"/>
 
         <Spinner
-            android:id="@+id/spinner2"
+            android:id="@+id/terrein"
             android:layout_width="132dp"
             android:layout_height="match_parent"
             android:background="@android:drawable/btn_dropdown"
             android:focusable="true"
             android:spinnerMode="dropdown"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:textSize="8sp"/>
 
         <Spinner
-            android:id="@+id/spinner3"
+            android:id="@+id/proximity"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@android:drawable/btn_dropdown"
             android:focusable="true"
             android:spinnerMode="dropdown"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:textSize="8sp"/>
 
     </LinearLayout>
 
@@ -74,14 +77,6 @@
             android:text="Search"
             android:textSize="12sp" />
     </LinearLayout>
-
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="575dp"
-        android:layout_weight="1"
-        tools:layout="@android:layout/list_content" />
 
     <TextView
         android:id="@+id/attribution"

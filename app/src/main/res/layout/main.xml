@@ -2,17 +2,35 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#4CAF50"
+    android:background="#F4F6F8"
     android:hapticFeedbackEnabled="true">
 
     <LinearLayout
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#8A9C8A"
+        android:background="#F2F3F7"
         android:orientation="vertical">
 
+        <EditText
+            android:id="@+id/editText2"
+            android:layout_width="316dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:ems="10"
+            android:includeFontPadding="true"
+            android:inputType="textPersonName"
+            android:text="Vind een route voor je Scoot"
+            android:textColor="#3F51B5"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="298dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
+            android:background="@drawable/scooutroute_transparant"></ImageView>
+
     </LinearLayout>
-
-
 </ScrollView>

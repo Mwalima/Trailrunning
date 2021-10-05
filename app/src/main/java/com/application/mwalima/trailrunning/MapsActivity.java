@@ -8,15 +8,11 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -43,8 +39,6 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -77,21 +71,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     protected void start() {
         // Set up the spinner/dropdown list
-            Spinner distance = findViewById (R.id.spinner1);
+            Spinner distance = findViewById (R.id.afstand);
             ArrayAdapter<CharSequence> distance_adapter = ArrayAdapter.createFromResource (this,
                     R.array.distance_array, android.R.layout.simple_spinner_item);
         distance_adapter.setDropDownViewResource (android.R.layout.simple_spinner_dropdown_item);
             distance.setAdapter (distance_adapter);
 
         // Set up the spinner/terrain list
-        Spinner terrain = findViewById (R.id.spinner2);
+        Spinner terrain = findViewById (R.id.terrein);
         ArrayAdapter<CharSequence> terrain_adapter = ArrayAdapter.createFromResource (this,
                 R.array.terrain_array, android.R.layout.simple_spinner_item);
         terrain_adapter.setDropDownViewResource (android.R.layout.simple_spinner_dropdown_item);
         terrain.setAdapter (terrain_adapter);
 
         // Set up the spinner/proximity list
-        Spinner proximity = findViewById (R.id.spinner3);
+        Spinner proximity = findViewById (R.id.proximity);
         ArrayAdapter<CharSequence> proximity_adapter = ArrayAdapter.createFromResource (this,
                 R.array.proximity_array, android.R.layout.simple_spinner_item);
         proximity_adapter.setDropDownViewResource (android.R.layout.simple_spinner_dropdown_item);
@@ -203,7 +197,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 MarkerOptions markerOptions = new MarkerOptions ();
                 markerOptions.position (latLng);
                 markerOptions.title ("Current Position");
-                markerOptions.icon (BitmapDescriptorFactory.defaultMarker (BitmapDescriptorFactory.HUE_RED));
+                markerOptions.icon (BitmapDescriptorFactory.defaultMarker (BitmapDescriptorFactory.HUE_BLUE));
                 currentLocationmMarker = mMap.addMarker (markerOptions);
 
                 mMap.clear ();
@@ -215,7 +209,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 .strokeColor (Color.RED)
                                 .fillColor (Color.argb (70, 150, 50, 50))
                 );
-                String all = "cafe&restaurant&mcdonalds&supermarket&public+toilet";
+                String all = "avoid=highways&mode=bicycling";
+
                 String url = getUrl (location.getLatitude (), location.getLongitude (), all);
                 dataTransfer[0] = mMap;
                 dataTransfer[1] = url;
@@ -298,8 +293,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                             .center (latLng)
                                             .radius (500.0)
                                             .strokeWidth (3f)
-                                            .strokeColor (Color.RED)
-                                            .fillColor (Color.argb (70, 150, 50, 50))
+                                            .strokeColor (Color.BLUE)
+                                            .fillColor (Color.argb (0x46, 40, 31, 107))
                             );
                             String all = "cafe";
                             String url = getUrl (lat, lng, all);
@@ -326,7 +321,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googlePlaceUrl.append ("location=" + latitude + "," + longitude);
         googlePlaceUrl.append ("&radius=" + 500);
         googlePlaceUrl.append ("&keyword=" +nearbyPlace);
+
+//        var gmmIntentUri = Uri.parse("google.navigation:q="+destintationLatitude+","+destintationLongitude + "&mode=b");
+//        var mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri);
+//        mapIntent.setPackage("com.google.android.apps.maps");
+//        startActivity(mapIntent);
+
         googlePlaceUrl.append ("&opennow");
+        googlePlaceUrl.append ("&avoid=highways&mode=bicycling");
         googlePlaceUrl.append ("&sensor=true");
         googlePlaceUrl.append ("&key=" + "AIzaSyBxo_Umr5453x5ij04DVw-euVKNHxSEWPc");
 

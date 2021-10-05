@@ -18,7 +18,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
 
         mListView = (ViewGroup) findViewById(R.id.list);
-        addPage("RunningMap", MapsActivity.class);
+        addPage("Scoot Route", MapsActivity.class);
     }
 
 

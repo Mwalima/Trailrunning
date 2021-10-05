@@ -11,31 +11,34 @@
         android:orientation="horizontal">
 
         <Spinner
-            android:id="@+id/spinner1"
+            android:id="@+id/afstand"
             android:layout_width="138dp"
             android:layout_height="match_parent"
             android:background="@android:drawable/btn_dropdown"
             android:clickable="true"
             android:focusable="true"
             android:spinnerMode="dropdown"
+            android:textSize="12sp"
             android:theme="@style/AppTheme" />
 
         <Spinner
-            android:id="@+id/spinner2"
+            android:id="@+id/terrein"
             android:layout_width="132dp"
             android:layout_height="match_parent"
             android:background="@android:drawable/btn_dropdown"
             android:focusable="true"
             android:spinnerMode="dropdown"
+            android:textSize="12sp"
             android:theme="@style/AppTheme" />
 
         <Spinner
-            android:id="@+id/spinner3"
+            android:id="@+id/proximity"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@android:drawable/btn_dropdown"
             android:focusable="true"
             android:spinnerMode="dropdown"
+            android:textSize="8sp"
             android:theme="@style/AppTheme" />
 
     </LinearLayout>

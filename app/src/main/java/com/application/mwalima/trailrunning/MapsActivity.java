@@ -1,12 +1,10 @@
 package com.application.mwalima.trailrunning;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
-
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -18,11 +16,11 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -39,15 +37,13 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
+        GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener, AdapterView.OnItemSelectedListener {
 
     private GoogleMap mMap;
     private LocationRequest locationRequest;
@@ -56,27 +52,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LatLng latLng;
     private double lat;
     private double lng;
+
     private Marker currentLocationmMarker;
     private List<Address> addressList;
     private FusedLocationProviderClient mFusedLocationClient;
     public static final int REQUEST_LOCATION_CODE = 99;
-
     private HashMap<String, DataSet> mLists = new HashMap<> ();
-
-
     protected int getLayoutId() {
         return R.layout.main;
     }
 
+    public int position;
 
     protected void start() {
-        // Set up the spinner/dropdown list
-            Spinner distance = findViewById (R.id.afstand);
-            ArrayAdapter<CharSequence> distance_adapter = ArrayAdapter.createFromResource (this,
-                    R.array.distance_array, android.R.layout.simple_spinner_item);
-        distance_adapter.setDropDownViewResource (android.R.layout.simple_spinner_dropdown_item);
-            distance.setAdapter (distance_adapter);
-
+//        // Set up the spinner/dropdown list
+//        Spinner distance = findViewById (R.id.afstand);
+//        ArrayAdapter<CharSequence> distance_adapter = ArrayAdapter.createFromResource (this,
+//                R.array.distance_array, android.R.layout.simple_spinner_item);
+//        distance_adapter.setDropDownViewResource (android.R.layout.simple_spinner_dropdown_item);
+//        distance.setAdapter (distance_adapter);
         // Set up the spinner/terrain list
         Spinner terrain = findViewById (R.id.terrein);
         ArrayAdapter<CharSequence> terrain_adapter = ArrayAdapter.createFromResource (this,
@@ -90,23 +84,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 R.array.proximity_array, android.R.layout.simple_spinner_item);
         proximity_adapter.setDropDownViewResource (android.R.layout.simple_spinner_dropdown_item);
         proximity.setAdapter (proximity_adapter);
-
-
+        proximity.setOnItemSelectedListener (this);
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate (savedInstanceState);
         setContentView (R.layout.activity_maps);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient (this);
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager ()
                 .findFragmentById (R.id.map);
         mapFragment.getMapAsync (this);
         start();
     }
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -123,7 +112,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
         }
     }
-
     @Override
     public void onResume() {
         super.onResume ();
@@ -133,12 +121,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             buildGoogleApiClient ();
         }
     }
-
-
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapType (GoogleMap.MAP_TYPE_NORMAL);
-
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission (this,
@@ -155,18 +140,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         start();
     }
-//
-//            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-//                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
-//                Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//                centreMapOnLocation(lastKnownLocation,"Your Location");
-//            } else {
-//
-//                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
-//            }
-//        }
-//        start ();
-
     protected synchronized void buildGoogleApiClient() {
         client = new GoogleApiClient.Builder (this)
                 .addConnectionCallbacks (this)
@@ -174,15 +147,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .addApi (LocationServices.API).build ();
         client.connect ();
     }
-
     LocationCallback locationCallback = new LocationCallback () {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             List<Location> locationList = locationResult.getLocations ();
             Object dataTransfer[] = new Object[2];
             GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData ();
-
-
             if (locationList.size () > 0) {
                 //The last location in the list is the newest
                 Location location = locationList.get (locationList.size () - 1);
@@ -191,7 +161,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if (currentLocationmMarker != null) {
                     currentLocationmMarker.remove ();
                 }
-
                 //Place current location marker
                 LatLng latLng = new LatLng (location.getLatitude (), location.getLongitude ());
                 MarkerOptions markerOptions = new MarkerOptions ();
@@ -199,7 +168,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 markerOptions.title ("Current Position");
                 markerOptions.icon (BitmapDescriptorFactory.defaultMarker (BitmapDescriptorFactory.HUE_BLUE));
                 currentLocationmMarker = mMap.addMarker (markerOptions);
-
                 mMap.clear ();
                 mMap.addCircle (
                         new CircleOptions ()
@@ -210,22 +178,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 .fillColor (Color.argb (70, 150, 50, 50))
                 );
                 String all = "avoid=highways&mode=bicycling";
-
                 String url = getUrl (location.getLatitude (), location.getLongitude (), all);
                 dataTransfer[0] = mMap;
                 dataTransfer[1] = url;
                 getNearbyPlacesData.execute (dataTransfer);
-                Toast.makeText (MapsActivity.this, "Toon dichtsbijzijnde mogelijkheden", Toast.LENGTH_SHORT).show ();
-
-                mMap.moveCamera (CameraUpdateFactory.newLatLngZoom (latLng, 15));
+                Toast.makeText (MapsActivity.this, "Toon dichtsbijzijnde route mogelijkheden", Toast.LENGTH_SHORT).show ();
+//                mMap.moveCamera (CameraUpdateFactory.newLatLngZoom (latLng, 10));
             }
         }
     };
-
     public void onLocationChanged(Location location) {
         lastlocation = location;
     }
-
     @Override
     public void onPause() {
         super.onPause ();
@@ -233,118 +197,121 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mFusedLocationClient.removeLocationUpdates (locationCallback);
         }
     }
-
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
-
     /**
      * Helper class - stores data sets and sources.
      */
     private class DataSet {
         private ArrayList<LatLng> mDataset;
         private String mUrl;
-
         public DataSet(ArrayList<LatLng> dataSet, String url) {
             this.mDataset = dataSet;
             this.mUrl = url;
         }
-
         public ArrayList<LatLng> getData() {
             return mDataset;
         }
-
         public String getUrl() {
             return mUrl;
         }
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        int radius_value=500;
+        this.position = radius_value;
+
+        Toast.makeText (MapsActivity.this, "proximity " + parent.getItemAtPosition(position), Toast.LENGTH_SHORT).show ();
 
 
-        public void GetCountry(View view) {
-            Object dataTransfer[] = new Object[2];
-            GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData ();
-            EditText tf_location = findViewById (R.id.onFocus);
-            String Searchlocation = tf_location.getText ().toString ();
-
-            switch (view.getId ()) {
-                case R.id.B_search:
-                    if (!Searchlocation.equals ("")) {
-                        Geocoder geocoder = new Geocoder (this);
-
-                        try {
-                            addressList = geocoder.getFromLocationName (Searchlocation, 1);
-
-                            for (int i = 0; i < addressList.size (); i++) {
-
-                                latLng = new LatLng (addressList.get (0).getLatitude (), addressList.get (0).getLongitude ());
-                                lat = addressList.get (0).getLatitude ();
-                                lng = addressList.get (0).getLongitude ();
-                                MarkerOptions markerOptions = new MarkerOptions ();
-                                markerOptions.position (latLng);
-                                markerOptions.title (Searchlocation);
-                                mMap.addMarker (markerOptions);
-                            }
-
-                            mMap.clear ();
-                            mMap.addCircle (
-                                    new CircleOptions ()
-                                            .center (latLng)
-                                            .radius (500.0)
-                                            .strokeWidth (3f)
-                                            .strokeColor (Color.BLUE)
-                                            .fillColor (Color.argb (0x46, 40, 31, 107))
-                            );
-                            String all = "cafe";
-                            String url = getUrl (lat, lng, all);
-                            dataTransfer[0] = mMap;
-                            dataTransfer[1] = url;
-                            getNearbyPlacesData.execute (dataTransfer);
-                            Toast.makeText (MapsActivity.this, "Toon dichtsbijzijnde mogelijkheden in " + Searchlocation, Toast.LENGTH_SHORT).show ();
-
-                            mMap.moveCamera (CameraUpdateFactory.newLatLngZoom (latLng, 14.0f));
-                            mMap.animateCamera (CameraUpdateFactory.zoomTo (13), 500, null);
-                        } catch (IOException e) {
-                            e.printStackTrace ();
-                        }
-                    }
-                    break;
-            }
+        switch (position) {
+            case 0:  radius_value = 5000;
+                break;
+            case 1:  radius_value = 10000;
+                break;
+            case 3:  radius_value = 15000;
+                break;
         }
 
+    }
 
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Another interface callback
+    }
+    public void GetPlace(View view) {
+        Object dataTransfer[] = new Object[2];
+        GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData ();
+        EditText tf_location = findViewById (R.id.onFocus);
+        String Searchlocation = tf_location.getText ().toString ();
+        switch (view.getId ()) {
+            case R.id.B_search:
+                if (!Searchlocation.equals ("")) {
+                    Geocoder geocoder = new Geocoder (this);
+                    try {
+                        addressList = geocoder.getFromLocationName (Searchlocation, 1);
+                        for (int i = 0; i < addressList.size (); i++) {
+                            latLng = new LatLng (addressList.get (0).getLatitude (), addressList.get (0).getLongitude ());
+                            lat = addressList.get (0).getLatitude ();
+                            lng = addressList.get (0).getLongitude ();
+                            MarkerOptions markerOptions = new MarkerOptions ();
+                            markerOptions.position (latLng);
+                            markerOptions.title (Searchlocation);
+                            mMap.addMarker (markerOptions);
+                        }
+                        mMap.clear ();
+                        //hier moet de zoek radius komen
+                        mMap.addCircle (
+                                new CircleOptions ()
+                                        .center (latLng)
+                                        .radius (this.position)
+                                        .strokeWidth (3f)
+                                        .strokeColor (Color.BLUE)
+                                        .fillColor (Color.argb (0x46, 40, 31, 107))
+                        );
+//                            hier moet de soort verharding van de weg komen
+                        String all = "avoid=highways&mode=bicycling";
+                        String url = getUrl (lat, lng, all);
+                        dataTransfer[0] = mMap;
+                        dataTransfer[1] = url;
+                        getNearbyPlacesData.execute (dataTransfer);
+                        Toast.makeText (MapsActivity.this, "Toon dichtsbijzijnde mogelijkheden in " + Searchlocation, Toast.LENGTH_SHORT).show ();
+                        mMap.moveCamera (CameraUpdateFactory.newLatLngZoom (latLng, 14.0f));
+                        mMap.animateCamera (CameraUpdateFactory.zoomTo (13), this.position, null);
+                    } catch (IOException e) {
+                        e.printStackTrace ();
+                    }
+                }
+                break;
+        }
+    }
 
     private String getUrl(double latitude, double longitude, String nearbyPlace) {
 
         StringBuilder googlePlaceUrl = new StringBuilder ("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         googlePlaceUrl.append ("location=" + latitude + "," + longitude);
-        googlePlaceUrl.append ("&radius=" + 500);
+        googlePlaceUrl.append ("&radius=" + this.position);
         googlePlaceUrl.append ("&keyword=" +nearbyPlace);
-
 //        var gmmIntentUri = Uri.parse("google.navigation:q="+destintationLatitude+","+destintationLongitude + "&mode=b");
 //        var mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri);
 //        mapIntent.setPackage("com.google.android.apps.maps");
 //        startActivity(mapIntent);
-
-        googlePlaceUrl.append ("&opennow");
+//        googlePlaceUrl.append ("&opennow");
         googlePlaceUrl.append ("&avoid=highways&mode=bicycling");
         googlePlaceUrl.append ("&sensor=true");
-        googlePlaceUrl.append ("&key=" + "AIzaSyBxo_Umr5453x5ij04DVw-euVKNHxSEWPc");
-
+//        googlePlaceUrl.append ("&key=" + google_maps_api.google_maps_key);
         Log.d ("MapsActivity", "url = " + googlePlaceUrl.toString ());
         return googlePlaceUrl.toString ();
     }
-
     public void onConnected(@Nullable Bundle bundle) {
         requestLocationUpdates ();
     }
-
     @Override
     public void onConnectionSuspended(int i) {
-
     }
-
     public void requestLocationUpdates() {
         locationRequest = new LocationRequest ();
         locationRequest.setInterval (120000);
@@ -356,7 +323,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //            mFusedLocationClient.requestLocationUpdates (locationRequest, locationCallback, Looper.myLooper ());
         }
     }
-
     public boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission (this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale (this, Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -368,5 +334,4 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else
             return true;
     }
-
 }

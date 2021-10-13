@@ -11,17 +11,6 @@
         android:orientation="horizontal">
 
         <Spinner
-            android:id="@+id/afstand"
-            android:layout_width="138dp"
-            android:layout_height="match_parent"
-            android:background="@android:drawable/btn_dropdown"
-            android:clickable="true"
-            android:focusable="true"
-            android:spinnerMode="dropdown"
-            android:textSize="12sp"
-            android:theme="@style/AppTheme" />
-
-        <Spinner
             android:id="@+id/terrein"
             android:layout_width="132dp"
             android:layout_height="match_parent"
@@ -38,7 +27,7 @@
             android:background="@android:drawable/btn_dropdown"
             android:focusable="true"
             android:spinnerMode="dropdown"
-            android:textSize="8sp"
+            android:textSize="12sp"
             android:theme="@style/AppTheme" />
 
     </LinearLayout>
@@ -70,7 +59,7 @@
             android:layout_marginStart="11dp"
             android:layout_marginLeft="11dp"
             android:layout_marginTop="5dp"
-            android:onClick="GetCountry"
+            android:onClick="GetPlace"
             android:text="@string/search"
             android:textSize="12sp" />
     </LinearLayout>

@@ -10,36 +10,37 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Spinner
-            android:id="@+id/afstand"
-            android:layout_width="138dp"
-            android:layout_height="match_parent"
-            android:background="@android:drawable/btn_dropdown"
-            android:clickable="true"
-            android:focusable="true"
-            android:spinnerMode="dropdown"
-            android:theme="@style/AppTheme"
-            android:textSize="8sp"/>
+        <!--<Spinner-->
+            <!--android:id="@+id/afstand"-->
+            <!--android:layout_width="138dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@android:drawable/btn_dropdown"-->
+            <!--android:clickable="true"-->
+            <!--android:focusable="true"-->
+            <!--android:spinnerMode="dropdown"-->
+            <!--android:theme="@style/AppTheme"-->
+            <!--android:textSize="8sp"/>-->
 
         <Spinner
             android:id="@+id/terrein"
-            android:layout_width="132dp"
+            android:layout_width="204dp"
             android:layout_height="match_parent"
             android:background="@android:drawable/btn_dropdown"
             android:focusable="true"
             android:spinnerMode="dropdown"
-            android:theme="@style/AppTheme"
-            android:textSize="8sp"/>
+            android:textSize="12sp"
+            android:theme="@style/AppTheme" />
 
         <Spinner
             android:id="@+id/proximity"
-            android:layout_width="fill_parent"
+            android:layout_width="204dp"
             android:layout_height="wrap_content"
             android:background="@android:drawable/btn_dropdown"
             android:focusable="true"
             android:spinnerMode="dropdown"
+            android:textSize="12sp"
             android:theme="@style/AppTheme"
-            android:textSize="8sp"/>
+            tools:visibility="visible" />
 
     </LinearLayout>
 
@@ -53,28 +54,25 @@
             style="@android:style/Widget.DeviceDefault.EditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_marginStart="7dp"
             android:layout_marginLeft="7dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="10dp"
+            android:autofillHints="naam van de locatie"
             android:ems="10"
-            android:hint="Type the name of the location"
-            android:inputType="textPersonName"
-            android:autofillHints="" />
+            android:hint="@string/type_the_name_of_the_location"
+            android:inputType="textPersonName" tools:targetApi="o" />
 
         <Button
             android:id="@+id/B_search"
             style="@android:style/Widget.Button"
             android:layout_width="150dp"
             android:layout_height="38dp"
-            android:layout_alignParentTop="false"
             android:layout_marginStart="11dp"
             android:layout_marginLeft="11dp"
             android:layout_marginTop="5dp"
-            android:layout_toEndOf="@+id/onFocus"
-            android:layout_toRightOf="@+id/onFocus"
             android:onClick="GetCountry"
-            android:text="Search"
+            android:text="@string/search"
             android:textSize="12sp" />
     </LinearLayout>
 

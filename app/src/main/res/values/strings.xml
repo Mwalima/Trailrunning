@@ -4,7 +4,6 @@
     <!--Terrein-->
     <string name="terrain_array">Terrein></string>
     <string-array name="terrain_array">
-        <item>Terrein</item>
         <item>fietspad</item>
         <item>wandelpad</item>
         <item>weg</item>
@@ -13,25 +12,28 @@
 
     <string name="proximity_array">Dichtbij</string>
     <string-array name="proximity_array">
-        <item>Dichtbij</item>
         <item>5 km</item>
         <item>10 km</item>
         <item>15 km</item>
     </string-array>
 
-    <string name="distance_array">Afstand</string>
-    <string-array name="distance_array">
-        <item>Afstand</item>
-        <item>5 km</item>
-        <item>10 km</item>
-        <item>15 km</item>
-        <item>20 km</item>
-    </string-array>
+    <!--<string name="distance_array">Afstand</string>-->
+    <!--<string-array name="distance_array">-->
+        <!--<item>5 km</item>-->
+        <!--<item>10 km</item>-->
+        <!--<item>15 km</item>-->
+        <!--<item>20 km</item>-->
+    <!--</string-array>-->
 
 
     <string name="country_array">Land</string>
     <string name="search">Zoeken</string>
     <string name="type_the_name_of_the_location">plaatsnaam of stad</string>
+    <string name="logo">logo</string>
+    <string name="button">Button</string>
+    <string name="jhgjhgjg">jhgjhgjg</string>
+    <string name="last_backup">Route voor je Scoot</string>
+    <string name="test">test</string>
     <string-array name="country_array">
         <item>Land</item>
         <item>Belgium</item>

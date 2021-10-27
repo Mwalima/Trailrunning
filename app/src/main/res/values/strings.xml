@@ -12,9 +12,10 @@
 
     <string name="proximity_array">Dichtbij</string>
     <string-array name="proximity_array">
-        <item>5 km</item>
-        <item>10 km</item>
-        <item>15 km</item>
+        <item>500m</item>
+        <item>1km</item>
+        <item>5km</item>
+        <item>10km</item>
     </string-array>
 
     <!--<string name="distance_array">Afstand</string>-->

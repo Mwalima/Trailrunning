@@ -62,7 +62,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return R.layout.main;
     }
 
-    public int position;
+    public int radius;
 
     protected void start() {
 //        // Set up the spinner/dropdown list
@@ -123,7 +123,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMapType (GoogleMap.MAP_TYPE_NORMAL);
+        mMap.setMapType (GoogleMap.MAP_TYPE_TERRAIN);
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission (this,
@@ -147,6 +147,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .addApi (LocationServices.API).build ();
         client.connect ();
     }
+
+
     LocationCallback locationCallback = new LocationCallback () {
         @Override
         public void onLocationResult(LocationResult locationResult) {
@@ -172,7 +174,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mMap.addCircle (
                         new CircleOptions ()
                                 .center (latLng)
-                                .radius (500.0)
+                                .radius (500)
                                 .strokeWidth (3f)
                                 .strokeColor (Color.RED)
                                 .fillColor (Color.argb (70, 150, 50, 50))
@@ -183,10 +185,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 dataTransfer[1] = url;
                 getNearbyPlacesData.execute (dataTransfer);
                 Toast.makeText (MapsActivity.this, "Toon dichtsbijzijnde route mogelijkheden", Toast.LENGTH_SHORT).show ();
-//                mMap.moveCamera (CameraUpdateFactory.newLatLngZoom (latLng, 10));
+                mMap.moveCamera (CameraUpdateFactory.newLatLngZoom (latLng, 15));
             }
         }
     };
+
     public void onLocationChanged(Location location) {
         lastlocation = location;
     }
@@ -219,24 +222,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+    public void onItemSelected(AdapterView<?> parent, View view, int radius, long id) {
 
-        int radius_value=500;
-        this.position = radius_value;
+        this.radius = radius;
 
-        Toast.makeText (MapsActivity.this, "proximity " + parent.getItemAtPosition(position), Toast.LENGTH_SHORT).show ();
-
-
-        switch (position) {
-            case 0:  radius_value = 5000;
+        switch (radius) {
+            case 0:  this.radius = 500;
+                Toast.makeText (MapsActivity.this, "proximity " + parent.getItemAtPosition(radius), Toast.LENGTH_SHORT).show ();
                 break;
-            case 1:  radius_value = 10000;
+            case 1:  this.radius = 1000;
+                Toast.makeText (MapsActivity.this, "proximity " + parent.getItemAtPosition(radius), Toast.LENGTH_SHORT).show ();
                 break;
-            case 3:  radius_value = 15000;
+            case 2:  this.radius = 5000;
+                Toast.makeText (MapsActivity.this, "proximity " + parent.getItemAtPosition(radius), Toast.LENGTH_SHORT).show ();
+                break;
+            case 3:  this.radius = 10000;
+                Toast.makeText (MapsActivity.this, "proximity " + parent.getItemAtPosition(radius), Toast.LENGTH_SHORT).show ();
                 break;
         }
 
-    }
+   }
 
 
     public void onNothingSelected(AdapterView<?> parent) {
@@ -267,20 +272,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         mMap.addCircle (
                                 new CircleOptions ()
                                         .center (latLng)
-                                        .radius (this.position)
+                                        .radius (this.radius)
                                         .strokeWidth (3f)
-                                        .strokeColor (Color.BLUE)
+                                        .strokeColor (Color.RED)
                                         .fillColor (Color.argb (0x46, 40, 31, 107))
                         );
 //                            hier moet de soort verharding van de weg komen
-                        String all = "avoid=highways&mode=bicycling";
-                        String url = getUrl (lat, lng, all);
+                        String mode = "Bicycle";
+                        String url = getUrl (lat, lng, mode);
                         dataTransfer[0] = mMap;
                         dataTransfer[1] = url;
                         getNearbyPlacesData.execute (dataTransfer);
                         Toast.makeText (MapsActivity.this, "Toon dichtsbijzijnde mogelijkheden in " + Searchlocation, Toast.LENGTH_SHORT).show ();
-                        mMap.moveCamera (CameraUpdateFactory.newLatLngZoom (latLng, 14.0f));
-                        mMap.animateCamera (CameraUpdateFactory.zoomTo (13), this.position, null);
+                        mMap.moveCamera (CameraUpdateFactory.newLatLngZoom (latLng, 15.0f));
+                        if(this.radius == 500) {
+                            mMap.animateCamera (CameraUpdateFactory.zoomTo (15), this.radius, null);
+                        }
+                        if(this.radius == 1000) {
+                            mMap.animateCamera (CameraUpdateFactory.zoomTo (14), this.radius, null);
+                        }
+                        if(this.radius == 5000) {
+                            mMap.animateCamera (CameraUpdateFactory.zoomTo (12), this.radius, null);
+                        }
+                        if(this.radius == 10000) {
+                            mMap.animateCamera (CameraUpdateFactory.zoomTo (11), this.radius, null);
+                        }
                     } catch (IOException e) {
                         e.printStackTrace ();
                     }
@@ -293,16 +309,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         StringBuilder googlePlaceUrl = new StringBuilder ("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         googlePlaceUrl.append ("location=" + latitude + "," + longitude);
-        googlePlaceUrl.append ("&radius=" + this.position);
-        googlePlaceUrl.append ("&keyword=" +nearbyPlace);
-//        var gmmIntentUri = Uri.parse("google.navigation:q="+destintationLatitude+","+destintationLongitude + "&mode=b");
-//        var mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri);
-//        mapIntent.setPackage("com.google.android.apps.maps");
-//        startActivity(mapIntent);
-//        googlePlaceUrl.append ("&opennow");
-        googlePlaceUrl.append ("&avoid=highways&mode=bicycling");
+        googlePlaceUrl.append ("&radius=" + this.radius);
+        googlePlaceUrl.append ("avoid=highways&mode=bicycling");
+        googlePlaceUrl.append("&keyword=" + nearbyPlace);
+//        googlePlaceUrl.append ("&keyword=" +nearbyPlace);
         googlePlaceUrl.append ("&sensor=true");
-//        googlePlaceUrl.append ("&key=" + google_maps_api.google_maps_key);
+        googlePlaceUrl.append ("&key=" + "AIzaSyBxo_Umr5453x5ij04DVw-euVKNHxSEWPc");
         Log.d ("MapsActivity", "url = " + googlePlaceUrl.toString ());
         return googlePlaceUrl.toString ();
     }

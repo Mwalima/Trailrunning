@@ -64,7 +64,7 @@ class GetNearbyPlacesData extends AsyncTask<Object, String, String>{
             markerOptions.position(latLng);
             markerOptions.title(placeName);
             markerOptions.snippet (vicinity);
-            markerOptions.icon(BitmapDescriptorFactory.fromResource (R.mipmap.ic_scoot_foreground));
+            markerOptions.icon(BitmapDescriptorFactory.fromResource (R.mipmap.ic_scoot_round));
 
             mMap.addMarker(markerOptions);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
